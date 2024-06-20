@@ -21,8 +21,8 @@ import (
 	xrv "github.com/mattermost/xml-roundtrip-validator"
 	dsig "github.com/russellhaering/goxmldsig"
 
-	"github.com/crewjam/saml/logger"
-	"github.com/crewjam/saml/xmlenc"
+	"github.com/cyolosecurity/saml/logger"
+	"github.com/cyolosecurity/saml/xmlenc"
 )
 
 // Session represents a user session. It is returned by the
@@ -106,7 +106,7 @@ type IdentityProvider struct {
 	SessionProvider         SessionProvider
 	AssertionMaker          AssertionMaker
 	SignatureMethod         string
-	AssertionDigestMethod   *xmlenc.DigestMethod
+	AssertionDigestMethod   xmlenc.DigestMethod
 	ValidDuration           *time.Duration
 }
 
@@ -872,7 +872,7 @@ func (req *IdpAuthnRequest) MakeAssertionEl() error {
 	if req.IDP.AssertionDigestMethod == nil {
 		encryptor.DigestMethod = &xmlenc.SHA1
 	} else {
-		encryptor.DigestMethod = *req.IDP.AssertionDigestMethod
+		encryptor.DigestMethod = req.IDP.AssertionDigestMethod
 	}
 
 	encryptedDataEl, err := encryptor.Encrypt(certBuf, signedAssertionBuf, nil)
